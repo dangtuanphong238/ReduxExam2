@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import Main from './components/Main';
@@ -12,7 +11,6 @@ export default class App extends Component {
     );
   }
 }
-
 //step 1 : create default state:
 const defaultState = {
   arrWords: [
@@ -38,13 +36,26 @@ const defaultState = {
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'FILTER_SHOW_ALL':
-      return {...state, filterStatus: 'SHOW_ALL',
-      };
+      return {...state, filterStatus: 'SHOW_ALL'};
     case 'FILTER_MEMORIZED':
-      return {...state, filterStatus: 'MEMORIZED',
-      };
+      return {...state, filterStatus: 'MEMORIZED'};
     case 'FILTER_NEED_PRACTICE':
-      return {...state, filterStatus: 'NEED_PRACTICE',
+      return {...state, filterStatus: 'NEED_PRACTICE'};
+    case 'TOGGLE_MEMORIZED':
+      return {
+        ...state,
+        arrWords: state.arrWords.map((e) => {
+          if (e.id !== action.id) return e;
+          return {...e, memorized: !e.memorized};
+        }),
+      };
+    case 'TOGGLE_SHOW':
+      return {
+        ...state,
+        arrWords: state.arrWords.map((e) => {
+          if (e.id !== action.id) return e;
+          return {...e, isShow: !e.isShow};
+        }),
       };
     default:
       break;
@@ -54,16 +65,6 @@ const reducer = (state = defaultState, action) => {
 
 //step 3: create store: install redux lib
 const store = createStore(reducer);
-
 //step 4 : tich hop store vao ung dung: install react-redux
 //cần require Provider ... provider là 1 component có 1 props là store được định nghĩa sẵn
 //file nào cần sử dụng state thì có thể sử dụng provider ở file đó
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'yellow',
-  },
-});
